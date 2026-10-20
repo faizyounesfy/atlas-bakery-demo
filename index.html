@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas Bakery</title>
+<meta name="description" content="Sourdough, croissants and house pastries, baked by hand every day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Amiri:wght@700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fffaf3;
+    --flour: #f4ebdf;
+    --crust: #c86635;
+    --crust-deep: #9e4521;
+    --ink: #2a1f18;
+    --ink-soft: #6b5a4c;
+    --leaf: #1f8a5b;
+    --line: #e7d9c6;
+    --display: 'Young Serif', Georgia, serif;
+    --body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  }
+  [lang='ar'] {
+    --display: 'Amiri', 'Segoe UI', serif;
+    --body: 'IBM Plex Sans Arabic', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); }
+  a { color: inherit; }
+  img, svg { display: block; }
+  :focus-visible { outline: 3px solid var(--crust); outline-offset: 3px; border-radius: 4px; }
+  .skip { position: absolute; inset-inline-start: 12px; top: -60px; padding: 10px 14px; background: var(--ink); color: var(--paper); border-radius: 6px; z-index: 10; }
+  .skip:focus { top: 12px; }
+  .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+
+  .demo { background: var(--ink); color: #f6e9da; font-size: 13px; text-align: center; padding: 7px 16px; }
+
+  header { position: sticky; top: 0; z-index: 5; background: rgba(255, 250, 243, 0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .bar { display: flex; align-items: center; gap: 20px; min-height: 68px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 22px/1 var(--display); }
+  .mark { width: 34px; height: 34px; border-radius: 10px; background: var(--crust); display: grid; place-items: center; }
+  nav { margin-inline-start: auto; display: flex; gap: 22px; }
+  nav a { text-decoration: none; color: var(--ink-soft); font-weight: 500; }
+  nav a:hover { color: var(--ink); }
+  .switch { display: flex; gap: 2px; padding: 3px; background: var(--flour); border-radius: 10px; }
+  .switch button { border: 0; background: none; font: 600 14px/1 var(--body); color: var(--ink-soft); padding: 8px 11px; border-radius: 8px; cursor: pointer; }
+  .switch button[aria-pressed='true'] { background: var(--crust); color: #fff; }
+  .switch button[lang='ar'] { font-family: 'IBM Plex Sans Arabic', 'Segoe UI', sans-serif; }
+
+  main.switching [data-i18n] { opacity: 0; transform: translateY(4px); }
+  [data-i18n] { transition: opacity 180ms ease, transform 180ms ease; }
+
+  .hero { padding: 64px 0 72px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
+  .label { display: inline-block; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; color: var(--crust-deep); background: #fff; }
+  h1 { font: 64px/1.04 var(--display); margin: 18px 0 18px; letter-spacing: -0.5px; }
+  [lang='ar'] h1 { font-size: 66px; line-height: 1.25; letter-spacing: 0; }
+  .lead { font-size: 19px; color: var(--ink-soft); max-width: 34em; margin: 0; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 20px; border-radius: 12px; font-weight: 600; text-decoration: none; border: 1px solid transparent; }
+  .btn.solid { background: var(--crust); color: #fff; }
+  .btn.solid:hover { background: var(--crust-deep); }
+  .btn.order { background: var(--leaf); color: #fff; }
+  .btn.order:hover { filter: brightness(0.92); }
+  .arrow { display: inline-block; }
+  [dir='rtl'] .arrow { transform: scaleX(-1); }
+  .board { aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #f1d6b4, #e3bd92 70%, #d4a576); display: grid; place-items: center; box-shadow: inset 0 -14px 0 rgba(120, 70, 30, 0.12); }
+  .board svg { width: 78%; }
+
+  section { padding: 72px 0; }
+  .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+  h2 { font: 42px/1.1 var(--display); margin: 0; }
+  [lang='ar'] h2 { line-height: 1.4; }
+  .section-head p { margin: 0; color: var(--ink-soft); max-width: 28em; }
+
+  .menu { background: #fff; border-block: 1px solid var(--line); }
+  .items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 56px; }
+  .item { display: grid; grid-template-columns: 48px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px dashed var(--line); }
+  .item svg { width: 48px; height: 48px; }
+  .item-line { display: flex; align-items: baseline; gap: 10px; }
+  .item-line b { font-weight: 600; }
+  .item-line i { flex: 1; border-bottom: 2px dotted #d9c6ae; transform: translateY(-5px); }
+  .price { font-variant-numeric: tabular-nums; color: var(--crust-deep); font-weight: 600; white-space: nowrap; }
+  .item p { margin: 2px 0 0; color: var(--ink-soft); font-size: 15px; }
+
+  .story .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .story p { color: var(--ink-soft); margin: 18px 0 0; }
+  .quotes { display: grid; gap: 14px; margin: 0; }
+  .quotes figure { margin: 0; padding: 18px 20px; background: var(--flour); border-radius: 14px; }
+  .quotes blockquote { margin: 0; font: 19px/1.5 var(--display); }
+  .quotes figcaption { margin-top: 8px; font-size: 14px; color: var(--ink-soft); }
+  .sample { font-size: 13px; color: var(--ink-soft); }
+
+  .visit .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .hours { width: 100%; border-collapse: collapse; margin: 22px 0; }
+  .hours td { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .hours td:last-child { text-align: end; font-variant-numeric: tabular-nums; }
+  .map { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }
+
+  footer { padding: 28px 0 40px; color: var(--ink-soft); font-size: 14px; border-top: 1px solid var(--line); }
+
+  @media (max-width: 820px) {
+    body { font-size: 16px; }
+    nav { display: none; }
+    .switch { margin-inline-start: auto; }
+    .hero { padding: 36px 0 48px; }
+    .hero .wrap, .story .wrap, .visit .wrap { grid-template-columns: 1fr; gap: 32px; }
+    h1 { font-size: 44px; }
+    [lang='ar'] h1 { font-size: 46px; }
+    h2 { font-size: 32px; }
+    .board { max-width: 340px; margin-inline: auto; }
+    .items { grid-template-columns: 1fr; }
+    .section-head { display: block; }
+    .section-head p { margin-top: 10px; }
+    section { padding: 52px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<div class="demo" data-i18n="demo">Portfolio demo with sample content</div>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#main">
+      <span class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2 14.6 9.4 22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6z"/></svg></span>
+      <span data-i18n="brand">Atlas Bakery</span>
+    </a>
+    <nav aria-label="Main">
+      <a href="#menu" data-i18n="navMenu">Menu</a>
+      <a href="#story" data-i18n="navStory">Our story</a>
+      <a href="#visit" data-i18n="navVisit">Visit</a>
+    </nav>
+    <div class="switch" role="group" aria-label="Language">
+      <button type="button" data-lang="en" lang="en" aria-label="English">EN</button>
+      <button type="button" data-lang="fr" lang="fr" aria-label="Français">FR</button>
+      <button type="button" data-lang="ar" lang="ar" aria-label="العربية">ع</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <span class="label" data-i18n="heroLabel">Fresh every morning from 6 am</span>
+        <h1 data-i18n="heroTitle">Real flavor starts here</h1>
+        <p class="lead" data-i18n="heroLead">Sourdough, croissants and house pastries, baked by hand every day in small batches.</p>
+        <div class="actions">
+          <a class="btn solid" href="#menu"><span data-i18n="ctaMenu">See the menu</span> <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn order" href="#visit" data-i18n="ctaOrder">Order on WhatsApp</a>
+        </div>
+      </div>
+      <div class="board" aria-hidden="true">
+        <svg viewBox="0 0 240 200" fill="none">
+          <ellipse cx="120" cy="170" rx="96" ry="14" fill="#c99c6e"/>
+          <path d="M40 140C36 104 64 70 110 66C152 62 182 96 182 130C181 150 158 156 112 156C66 156 44 152 40 140Z" fill="#c97937"/>
+          <path d="M68 96L86 116M104 82L120 104M140 88L156 110" stroke="#f7d39a" stroke-width="9" stroke-linecap="round"/>
+          <path d="M150 158C150 128 168 104 196 102C220 100 236 120 236 146C236 158 220 164 194 164C168 164 150 164 150 158Z" fill="#e6a34f"/>
+          <path d="M160 146C168 128 182 120 198 119C212 118 224 128 228 140" stroke="#ffe0a3" stroke-width="8" stroke-linecap="round"/>
+          <path d="M4 160C4 136 20 118 44 116C68 114 84 130 84 152C84 162 70 166 46 166C22 166 4 166 4 160Z" fill="#b75c36"/>
+          <path d="M16 146C24 132 36 128 48 128C60 129 70 136 74 146" stroke="#f2c68c" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 data-i18n="menuTitle">Today's bakes</h2>
+        <p data-i18n="menuIntro">Prices are per piece. Ask us about whole loaves and trays for events.</p>
+      </div>
+      <ul class="items" id="items"></ul>
+    </div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="wrap">
+      <div>
+        <h2 data-i18n="storyTitle">Baked by hand since 1998</h2>
+        <p data-i18n="storyText">Three generations, one stone oven, and flour from mills we know by name. We start at 3 am so the first loaves are still warm when you walk in.</p>
+      </div>
+      <div>
+        <div class="quotes">
+          <figure><blockquote data-i18n="q1">The croissants sell out by nine. Come early.</blockquote><figcaption><bdi>Sara M.</bdi></figcaption></figure>
+          <figure><blockquote data-i18n="q2">The best sourdough in the neighborhood, every single day.</blockquote><figcaption><bdi>Karim B.</bdi></figcaption></figure>
+          <figure><blockquote data-i18n="q3">They baked our wedding cake on two days' notice.</blockquote><figcaption><bdi>Léa D.</bdi></figcaption></figure>
+        </div>
+        <p class="sample" data-i18n="sample">Sample reviews written for this demo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="visit" id="visit">
+    <div class="wrap">
+      <div>
+        <h2 data-i18n="visitTitle">Visit us</h2>
+        <table class="hours">
+          <tr><td data-i18n="weekdays">Monday to Saturday</td><td><bdi dir="ltr">6:00 – 20:00</bdi></td></tr>
+          <tr><td data-i18n="sunday">Sunday</td><td><bdi dir="ltr">7:00 – 13:00</bdi></td></tr>
+        </table>
+        <p data-i18n="address">12 Example Street, Your City</p>
+        <div class="actions">
+          <a class="btn order" href="#visit" data-i18n="ctaOrder">Order on WhatsApp</a>
+          <a class="btn solid" href="#visit"><span data-i18n="ctaDirections">Get directions</span> <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="map" aria-hidden="true">
+        <svg viewBox="0 0 480 320">
+          <rect width="480" height="320" fill="#efe4d4"/>
+          <path d="M-10 230L490 150M140 -10L230 330M300 -10L360 330M-10 70L490 110" stroke="#fffaf3" stroke-width="22"/>
+          <path d="M-10 230L490 150M140 -10L230 330M300 -10L360 330M-10 70L490 110" stroke="#e2d2bc" stroke-width="2"/>
+          <rect x="30" y="110" width="80" height="60" rx="8" fill="#d9e6cf"/>
+          <rect x="380" y="190" width="70" height="90" rx="8" fill="#d9e6cf"/>
+          <circle cx="262" cy="150" r="30" fill="rgba(200,102,53,.18)"/>
+          <path d="M262 118c-15 0-26 11-26 25 0 19 26 41 26 41s26-22 26-41c0-14-11-25-26-25z" fill="#c86635"/>
+          <circle cx="262" cy="143" r="9" fill="#fffaf3"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap" data-i18n="footer">© 2026 Atlas Bakery. Demo website with sample content.</div>
+</footer>
+
+<script>
+const LANGS = {
+  en: { dir: 'ltr', locale: 'en-US' },
+  fr: { dir: 'ltr', locale: 'fr-FR' },
+  ar: { dir: 'rtl', locale: 'ar-MA' },
+};
+
+const TEXT = {
+  en: {
+    title: 'Atlas Bakery: fresh bread and pastries every morning',
+    description: 'Sourdough, croissants and house pastries, baked by hand every day.',
+    skip: 'Skip to content', demo: 'Portfolio demo with sample content', brand: 'Atlas Bakery',
+    navMenu: 'Menu', navStory: 'Our story', navVisit: 'Visit',
+    heroLabel: 'Fresh every morning from 6 am', heroTitle: 'Real flavor starts here',
+    heroLead: 'Sourdough, croissants and house pastries, baked by hand every day in small batches.',
+    ctaMenu: 'See the menu', ctaOrder: 'Order on WhatsApp', ctaDirections: 'Get directions',
+    menuTitle: "Today's bakes", menuIntro: 'Prices are per piece. Ask us about whole loaves and trays for events.',
+    storyTitle: 'Baked by hand since 1998',
+    storyText: 'Three generations, one stone oven, and flour from mills we know by name. We start at 3 am so the first loaves are still warm when you walk in.',
+    q1: 'The croissants sell out by nine. Come early.', q2: 'The best sourdough in the neighborhood, every single day.', q3: "They baked our wedding cake on two days' notice.",
+    sample: 'Sample reviews written for this demo.',
+    visitTitle: 'Visit us', weekdays: 'Monday to Saturday', sunday: 'Sunday', address: '12 Example Street, Your City',
+    footer: '© 2026 Atlas Bakery. Demo website with sample content.',
+  },
+  fr: {
+    title: 'Boulangerie Atlas : pain et viennoiseries frais chaque matin',
+    description: 'Pain au levain, croissants et pâtisseries maison, cuits à la main chaque jour.',
+    skip: 'Aller au contenu', demo: 'Démo de portfolio, contenu fictif', brand: 'Boulangerie Atlas',
+    navMenu: 'La carte', navStory: 'Notre histoire', navVisit: 'Nous trouver',
+    heroLabel: 'Frais chaque matin dès 6 h', heroTitle: 'Le vrai goût commence ici',
+    heroLead: 'Pain au levain, croissants et pâtisseries maison, cuits à la main chaque jour en petites fournées.',
+    ctaMenu: 'Voir la carte', ctaOrder: 'Commander sur WhatsApp', ctaDirections: 'Itinéraire',
+    menuTitle: 'Les fournées du jour', menuIntro: 'Prix à la pièce. Demandez-nous les grands pains et plateaux pour vos événements.',
+    storyTitle: 'Fait main depuis 1998',
+    storyText: 'Trois générations, un four en pierre et des farines de moulins que nous connaissons par leur nom. Nous commençons à 3 h pour que les premiers pains soient encore chauds à votre arrivée.',
+    q1: 'Les croissants partent avant 9 h. Venez tôt.', q2: 'Le meilleur pain au levain du quartier, tous les jours.', q3: 'Ils ont fait notre gâteau de mariage en deux jours.',
+    sample: 'Avis fictifs rédigés pour cette démo.',
+    visitTitle: 'Nous trouver', weekdays: 'Du lundi au samedi', sunday: 'Dimanche', address: '12 rue de l’Exemple, Votre ville',
+    footer: '© 2026 Boulangerie Atlas. Site de démonstration au contenu fictif.',
+  },
+  ar: {
+    title: 'مخبزة الأطلس: خبز ومخبوزات طازجة كل صباح',
+    description: 'خبز العجين المخمّر والكرواسون والحلويات المنزلية، نخبزها يدوياً كل يوم.',
+    skip: 'انتقل إلى المحتوى', demo: 'موقع تجريبي بمحتوى توضيحي', brand: 'مخبزة الأطلس',
+    navMenu: 'القائمة', navStory: 'قصتنا', navVisit: 'زورونا',
+    heroLabel: 'طازج كل صباح ابتداءً من السادسة', heroTitle: 'مذاق أصيل يبدأ من هنا',
+    heroLead: 'خبز العجين المخمّر والكرواسون والحلويات المنزلية، نخبزها يدوياً كل يوم بكميات صغيرة.',
+    ctaMenu: 'تصفّح القائمة', ctaOrder: 'اطلب عبر واتساب', ctaDirections: 'الاتجاهات',
+    menuTitle: 'مخبوزات اليوم', menuIntro: 'الأسعار للقطعة الواحدة. اسألونا عن الطلبيات الكبيرة للمناسبات.',
+    storyTitle: 'نخبز يدوياً منذ 1998',
+    storyText: 'ثلاثة أجيال، وفرن حجري واحد، ودقيق من مطاحن نعرفها بالاسم. نبدأ في الثالثة فجراً ليبقى الخبز الأول دافئاً عند وصولكم.',
+    q1: 'الكرواسون ينفد قبل التاسعة. تعالوا باكراً.', q2: 'أفضل خبز بالعجين المخمّر في الحي، كل يوم.', q3: 'حضّروا كعكة زفافنا في يومين فقط.',
+    sample: 'آراء توضيحية كُتبت لهذا الموقع التجريبي.',
+    visitTitle: 'زورونا', weekdays: 'من الاثنين إلى السبت', sunday: 'الأحد', address: '12 شارع المثال، مدينتك',
+    footer: '© 2026 مخبزة الأطلس. موقع تجريبي بمحتوى توضيحي.',
+  },
+};
+
+const ICONS = {
+  loaf: '<ellipse cx="24" cy="38" rx="20" ry="4" fill="#e3cdb0"/><path d="M5 31C4 20 12 11 24 10C35 9 43 18 43 28C43 34 37 36 24 36C11 36 6 35 5 31Z" fill="#c97937"/><path d="M14 18l5 6M23 14l5 6M32 16l4 6" stroke="#f7d39a" stroke-width="3" stroke-linecap="round"/>',
+  croissant: '<ellipse cx="24" cy="38" rx="19" ry="4" fill="#e3cdb0"/><path d="M6 32C6 22 14 13 24 12C34 11 42 20 42 30C42 34 36 36 24 36C12 36 6 35 6 32Z" fill="#e6a34f"/><path d="M10 28C14 21 19 18 26 18C32 18 36 22 39 27" stroke="#ffe0a3" stroke-width="3" stroke-linecap="round"/>',
+  chocolate: '<ellipse cx="24" cy="38" rx="19" ry="4" fill="#e3cdb0"/><rect x="7" y="15" width="34" height="20" rx="6" fill="#d98c45"/><path d="M14 22h20M14 28h20" stroke="#6b3a1f" stroke-width="3" stroke-linecap="round"/>',
+  horn: '<ellipse cx="24" cy="38" rx="19" ry="4" fill="#e3cdb0"/><path d="M8 30C12 18 24 12 38 16C34 22 26 30 12 34Z" fill="#f2dcc0"/><path d="M14 30C18 24 24 20 32 19" stroke="#d9b98f" stroke-width="2.5" stroke-linecap="round"/>',
+  focaccia: '<ellipse cx="24" cy="38" rx="20" ry="4" fill="#e3cdb0"/><rect x="5" y="14" width="38" height="22" rx="7" fill="#e0a85c"/><circle cx="14" cy="22" r="2.5" fill="#4a5a2a"/><circle cx="26" cy="27" r="2.5" fill="#4a5a2a"/><circle cx="34" cy="20" r="2.5" fill="#4a5a2a"/>',
+  tart: '<ellipse cx="24" cy="38" rx="19" ry="4" fill="#e3cdb0"/><path d="M7 24h34l-4 11H11z" fill="#d98c45"/><ellipse cx="24" cy="24" rx="17" ry="6" fill="#c9443a"/><circle cx="18" cy="23" r="2" fill="#f2a29a"/><circle cx="28" cy="25" r="2" fill="#f2a29a"/>',
+};
+
+const ITEMS = [
+  { icon: 'loaf', price: 4, name: { en: 'Sourdough loaf', fr: 'Pain au levain', ar: 'خبز العجين المخمّر' }, note: { en: '48-hour fermentation, crackling crust', fr: 'Fermentation de 48 h, croûte craquante', ar: 'تخمير 48 ساعة وقشرة مقرمشة' } },
+  { icon: 'croissant', price: 2.5, name: { en: 'Butter croissant', fr: 'Croissant au beurre', ar: 'كرواسون بالزبدة' }, note: { en: 'Laminated with real butter, baked at dawn', fr: 'Feuilleté au vrai beurre, cuit à l’aube', ar: 'مورّق بالزبدة الطبيعية، يُخبز مع الفجر' } },
+  { icon: 'chocolate', price: 3, name: { en: 'Pain au chocolat', fr: 'Pain au chocolat', ar: 'خبز بالشوكولاتة' }, note: { en: 'Two bars of dark chocolate', fr: 'Deux barres de chocolat noir', ar: 'قطعتان من الشوكولاتة الداكنة' } },
+  { icon: 'horn', price: 3.5, name: { en: 'Almond horns', fr: 'Cornes de gazelle', ar: 'كعب الغزال' }, note: { en: 'Almond paste, orange blossom, thin crust', fr: 'Pâte d’amande, fleur d’oranger, pâte fine', ar: 'لوز وماء الزهر بعجينة رقيقة' } },
+  { icon: 'focaccia', price: 5, name: { en: 'Olive focaccia', fr: 'Focaccia aux olives', ar: 'فوكاتشيا بالزيتون' }, note: { en: 'Olive oil, black olives, rosemary', fr: 'Huile d’olive, olives noires, romarin', ar: 'زيت زيتون وزيتون أسود وإكليل الجبل' } },
+  { icon: 'tart', price: 4.5, name: { en: 'Seasonal fruit tart', fr: 'Tarte aux fruits de saison', ar: 'تارت الفواكه الموسمية' }, note: { en: 'Whatever the market had this morning', fr: 'Selon le marché du matin', ar: 'حسب ما توفّر في سوق الصباح' } },
+];
+
+function price(value, lang) {
+  return new Intl.NumberFormat(LANGS[lang].locale, { style: 'currency', currency: 'USD', numberingSystem: 'latn' }).format(value);
+}
+
+function renderItems(lang) {
+  document.getElementById('items').innerHTML = ITEMS.map((item) => `
+    <li class="item">
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">${ICONS[item.icon]}</svg>
+      <div>
+        <div class="item-line"><b>${item.name[lang]}</b><i aria-hidden="true"></i><span class="price" dir="ltr">${price(item.price, lang)}</span></div>
+        <p>${item.note[lang]}</p>
+      </div>
+    </li>`).join('');
+}
+
+function apply(lang, animate = true) {
+  if (!LANGS[lang]) lang = 'en';
+  const main = document.querySelector('main');
+  const swap = () => {
+    const root = document.documentElement;
+    root.lang = lang;
+    root.dir = LANGS[lang].dir;
+    document.title = TEXT[lang].title;
+    document.querySelector('meta[name="description"]').content = TEXT[lang].description;
+    for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = TEXT[lang][el.dataset.i18n];
+    for (const button of document.querySelectorAll('.switch button')) button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
+    renderItems(lang);
+    const url = new URL(location.href);
+    url.searchParams.set('lang', lang);
+    history.replaceState(null, '', url);
+    try { localStorage.setItem('atlas-lang', lang); } catch {}
+    main.classList.remove('switching');
+  };
+  if (!animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return swap();
+  main.classList.add('switching');
+  setTimeout(swap, 180);
+}
+
+function initialLang() {
+  const fromUrl = new URLSearchParams(location.search).get('lang');
+  if (LANGS[fromUrl]) return fromUrl;
+  try {
+    const saved = localStorage.getItem('atlas-lang');
+    if (LANGS[saved]) return saved;
+  } catch {}
+  const browser = (navigator.language || 'en').slice(0, 2);
+  return LANGS[browser] ? browser : 'en';
+}
+
+for (const button of document.querySelectorAll('.switch button')) button.addEventListener('click', () => apply(button.dataset.lang));
+apply(initialLang(), false);
+</script>
+</body>
+</html>
